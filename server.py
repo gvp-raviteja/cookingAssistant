@@ -1,17 +1,22 @@
 __author__ = 'hemalatha_ganireddy'
 
+import os
 from flask import Flask
-from main import main
+import sys
+sys.path.append('../logic/')
+
+import main
 import json
 
 app = Flask(__name__)
 
+
 @app.route('/')
 def index():
-    output =  main()
+    output = main()
     json.loads(output)['result']['metadata']['intentName']
     return "Hello, World!"
 
 
-if __name__ == '__main__':
-    app.run(debug=True)
+port = int(os.environ.get("PORT", 5000))
+app.run(debug=True, port=port)
