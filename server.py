@@ -13,8 +13,8 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    output = main()
-    json.loads(output)['result']['metadata']['intentName']
+    # output = main.ma()
+    # json.loads(output)['result']['metadata']['intentName']
     return "Hello, World!"
 
 
