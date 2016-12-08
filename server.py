@@ -19,5 +19,5 @@ def index():
     # json.loads(output)['result']['metadata']['intentName']
     return "Hello, World!"
 
-port = int(os.environ.get("PORT", 5000))
+port = int(os.environ.get("PORT", 80))
 app.run(debug=True, port=port)
