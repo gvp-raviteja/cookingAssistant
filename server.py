@@ -13,11 +13,17 @@ app = Flask(__name__)
 def sam():
     return True
 
-@app.route('/')
+@app.route('/',methods=['GET'])
 def index():
-    # output = main.ma()
+    
     # json.loads(output)['result']['metadata']['intentName']
     return "Hello, World!"
+
+@app.route('/',methods=['POST'])
+def index1():
+    print request.data
+    # json.loads(output)['result']['metadata']['intentName']
+    return "Hello"
 
 if __name__ == '__main__':
     app.debug = True
