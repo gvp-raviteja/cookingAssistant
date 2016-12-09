@@ -21,9 +21,9 @@ def index():
 
 @app.route('/',methods=['POST'])
 def index1():
-    print request.form['data']
+    print request.data
     # json.loads(output)['result']['metadata']['intentName']
-    return request.form['data']
+    return request.data
 
 if __name__ == '__main__':
     app.debug = True
