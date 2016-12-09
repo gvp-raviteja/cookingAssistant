@@ -1,7 +1,7 @@
 __author__ = 'hemalatha_ganireddy'
 
 import os
-from flask import Flask
+from flask import Flask, request
 import sys
 
 import main
@@ -21,9 +21,9 @@ def index():
 
 @app.route('/',methods=['POST'])
 def index1():
-    print request.data
+    print request.form['data']
     # json.loads(output)['result']['metadata']['intentName']
-    return "Hello"
+    return request.form['data']
 
 if __name__ == '__main__':
     app.debug = True
