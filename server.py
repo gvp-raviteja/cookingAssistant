@@ -17,52 +17,52 @@ except ImportError:
     import apiai
 
 app = Flask(__name__)
-
+DEFAULT = "8bd3b6024a8e461f8e4e63c181882295"
+CHICKEN = "3e46239a1f334a378ee7a212f590010f"
+BREAD = "1b47e65f9fee42d0be30b00a42673ddf"
+SESSION = "0"
+COUNTER = "0"
 @app.route('/favicon.ico')
 def sam():
     return True
 
+def call_ai(client_access_token,user_input):
+    try:
+        ai = apiai.ApiAI(client_access_token)
+        request = ai.text_request()
+        request.query = user_input
+        response = request.getresponse()
+        output = json.loads(response.read())['result']
+        output_speech = output["fulfillment"]["speech"]
+        intent_name = output["metadata"]["intentName"]
+    except (RuntimeError,TypeError,NameError):
+        pass
+    return [output_speech,intent_name]
 
 def basic(user_input):
-    f = open('clienttoken', 'r+')
-    r = open('logfile','a')
-    client_access_token = f.read()
-    ui = '"hello"'
-    user_input = (str(user_input))
-    if str(user_input) == ui:
-        client_access_token = "8bd3b6024a8e461f8e4e63c181882295"
-        f.seek(0,0)
-        f.write(client_access_token)
-    ai = apiai.ApiAI(client_access_token)
-    request = ai.text_request()
-    # request.lang = 'en'  # optional, default value equal 'en'
-    # request.session_id = "unique"
-    request.query = user_input
-    r.write("User:"+user_input+"\n")
-    response = request.getresponse()
-    output = json.loads(response.read())['result']
-    output_speech = output["fulfillment"]["speech"]
-    r.write("System:"+output_speech+"\n")
-    print output_speech
-    intent_name = output["metadata"]["intentName"]
+    global DEFAULT, CHICKEN, BREAD, SESSION, COUNTER
+    [output_speech,intent_name] = call_ai(DEFAULT,user_input)
     if "chicken" in output_speech:
-        client_access_token = "3e46239a1f334a378ee7a212f590010f"
-        f.seek(0,0)
-        a = f.tell()
-        print a
-        f.write(client_access_token)
+        SESSION = "1"
+        COUNTER = "0"
     elif "bread" in output_speech:
-        client_access_token = "1b47e65f9fee42d0be30b00a42673ddf"
-        f.seek(0, 0)
-        f.write(client_access_token)
-    f.close()
-    print output_speech
+        SESSION = "2"
+        COUNTER = "0"
+    if intent_name == "NextSteps":
+        step_no = int(COUNTER) + 1
+        COUNTER = str(step_no)
+        if (SESSION == "1"):
+            client_access_token = CHICKEN
+        elif (SESSION == "2"):
+            client_access_token = BREAD
+        user_input = "Step "+str(step_no)
+        [output_speech,intent_name] = call_ai(client_access_token,user_input)
+        return output_speech
     return output_speech
-
 
 @app.route('/',methods = ['POST'])
 def index():
-    data = request.data
+    data = request.form['data']
     print data
     output_speech = basic(data)
     return output_speech
