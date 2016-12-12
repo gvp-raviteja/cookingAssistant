@@ -62,7 +62,7 @@ def basic(user_input):
 
 @app.route('/',methods = ['POST'])
 def index():
-    data = request.form['data']
+    data = request.data
     print data
     output_speech = basic(data)
     return output_speech
