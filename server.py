@@ -59,6 +59,7 @@ def basic(user_input):
         user_input = "Step "+str(step_no)
         [output_speech,intent_name] = call_ai(client_access_token,user_input)
         return output_speech
+    print "session: " + SESSION
     return output_speech
 
 @app.route('/',methods = ['POST'])
