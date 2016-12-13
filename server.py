@@ -90,9 +90,14 @@ def basic(user_input):
             output_speech = "Okay! Let's start cooking strawberry pie.Say ready when you are ready to start cooking."
             SESSION = 6
             COUNTER = 0
-    if (intent_name == 'Default Fallback Intent') and (SESSION!=0):
+    if (intent_name == 'Default Fallback Intent') and (SESSION!=0) and (COUNTER!=0):
         output_speech = "Sorry I didn't understand what you are trying to say!Please say repeat to repeat the current recipe" \
                         " or next for the next step or previous for the previous step or exit to return to menu"
+        log.info("System:" + output_speech)
+        return output_speech
+    if (intent_name == "Default Fallback Intent") and (SESSION!=0) and (COUNTER==0):
+        output_speech = "Sorry I didn't understand what you were trying to say.Please say ready if you are ready to start" \
+                        " cooking."
         log.info("System:" + output_speech)
         return output_speech
     if (intent_name == 'Somethingelse-no') and (SESSION!=0):
@@ -121,7 +126,6 @@ def basic(user_input):
         user_input = "step" + str(step_no)
         [output_speech, intent_name] = call_ai(client_access_token, user_input)
         log.info("System:" + output_speech)
-
         return output_speech
     elif (intent_name == "Repeat") and (SESSION!=0):
         step_no = COUNTER
