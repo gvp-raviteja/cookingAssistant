@@ -57,6 +57,7 @@ def call_ai(client_access_token,user_input,set):
                 if i["name"] == "survey":
                     context = 1
                     SESSION = 0
+                    COUNTER = 0
         else:
             context = 0
         print context
@@ -108,9 +109,13 @@ def basic(user_input):
     #if ((intent_name == "SelectRecipe") and SESSION!=0):
         #intent_name = "Default Fallback Intent"
     if (intent_name == 'Default Fallback Intent') and (context == 1):
-        output_speech = "Sorry! I didn't understand you.How would you like to rate me on a scale of 1 to 5, 1 for poor and 5 for excellent?"
+        SESSION = 0
+        COUNTER = 0
+        output_speech = "Sorry! I didn't understand you.How would you like to rate me:excellent,good,fair,poor?"
+        log.info("System:" + output_speech)
+        return output_speech
     if (intent_name == 'Default Fallback Intent') and (SESSION!=0) and (COUNTER!=0):
-        output_speech = "Sorry I didn't understand what you are trying to say!Please say \"repeat\" to repeat the current recipe" \
+        output_speech = "Sorry I didn't understand what you are trying to say!Please say \"repeat\" to repeat the current step" \
                         " or \"next\" for the next step or \"previous\" for the previous step or \"exit\" to return to menu"
         log.info("System:" + output_speech)
         return output_speech
